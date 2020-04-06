@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="ProgressiveOverload.Views.WorkoutDayPage"
+             xmlns:vm="clr-namespace:ProgressiveOverload.ViewModels"
+             Title="{Binding Title}"
+             x:Name="WorkOoutDayPage">
+
+    <ContentPage.BindingContext>
+        <vm:WorkoutDayViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Content>
+
+        <StackLayout Margin="0,10">
+            <CollectionView ItemsSource="{Binding Workout}">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical"
+                                       ItemSpacing="10" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10"
+                              BackgroundColor="Gray">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Row="0"
+                                   Grid.Column="0"
+                                   FontSize="Medium"
+                                   Text="{Binding Name}"
+                                   TextColor="WhiteSmoke"
+                                   FontAttributes="Bold"
+                                   VerticalOptions="StartAndExpand" />
+                            <Label Grid.Column="1"
+                                   TextColor="White"
+                                   Text="{Binding Intensity, StringFormat='({0})'}"
+                                   VerticalOptions="Center" />
+                            <Label Grid.Column="2"
+                                   TextColor="White"
+                                   Text="{Binding Volume}"
+                                   VerticalOptions="Center" />
+                            <!--<CollectionView ItemsSource="{Binding ExerciseSets}"
+                                            VerticalOptions="StartAndExpand"
+                                            HorizontalOptions="CenterAndExpand"
+                                            Grid.Row="1"
+                                            Grid.ColumnSpan="3">
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Horizontal" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Frame Margin="10,0"
+                                               WidthRequest="70"
+                                               HeightRequest="70"
+                                               CornerRadius="50"
+                                               BackgroundColor="LightGray"
+                                               BorderColor="Black">
+                                            <Frame.GestureRecognizers>
+                                                <TapGestureRecognizer NumberOfTapsRequired="2"
+                                                                      CommandParameter="{Binding .}"
+                                                                      Command="{Binding Path=BindingContext.RemoveDoneCommand, 
+                                                                            Source={x:Reference WorkOoutDayPage}}" />
+                                                <TapGestureRecognizer NumberOfTapsRequired="1"
+                                                                      CommandParameter="{Binding .}"
+                                                                      Command="{Binding Path=BindingContext.SetDoneCommand, 
+                                                                            Source={x:Reference WorkOoutDayPage}}" />
+
+                                            </Frame.GestureRecognizers>
+                                            <Frame.Triggers>
+                                                <DataTrigger TargetType="Frame"
+                                                             Binding="{Binding Done}"
+                                                             Value="1">
+                                                    <Setter Property="BackgroundColor"
+                                                            Value="LightGreen" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="Frame"
+                                                             Binding="{Binding Done}"
+                                                             Value="-1">
+                                                    <Setter Property="BackgroundColor"
+                                                            Value="LightGray" />
+                                                </DataTrigger>
+                                            </Frame.Triggers>
+                                        </Frame>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+
+                            </CollectionView>-->
+
+                            <StackLayout BindableLayout.ItemsSource="{Binding ExerciseSets}"
+                                         Padding="2"
+                                         HorizontalOptions="FillAndExpand"
+                                         VerticalOptions="FillAndExpand"
+                                         Orientation="Horizontal"
+                                         Grid.Row="1"
+                                         Grid.ColumnSpan="3">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackLayout Spacing="15"
+                                                     HorizontalOptions="Start"
+                                                     VerticalOptions="Fill">
+                                            <Button Margin="10,0"
+                                                    Clicked="Button_Clicked"
+                                                    Text="{Binding Reps}"
+                                                    WidthRequest="70"
+                                                    HeightRequest="70"
+                                                    CornerRadius="50"
+                                                    BackgroundColor="LightGray"
+                                                    BorderColor="Black"
+                                                    BorderWidth="3"
+                                                    TextColor="Black">
+                                                <!--CommandParameter="{Binding .}"
+                                                    Command="{Binding Path=BindingContext.SetDoneCommand, 
+                                                        Source={x:Reference WorkOoutDayPage}}">-->
+
+                                                <Button.Triggers>
+                                                    <DataTrigger TargetType="Button"
+                                                                 Binding="{Binding Done}"
+                                                                 Value="1">
+                                                        <Setter Property="BackgroundColor"
+                                                                Value="LightGreen" />
+                                                    </DataTrigger>
+                                                    <DataTrigger TargetType="Button"
+                                                                 Binding="{Binding Done}"
+                                                                 Value="-1">
+                                                        <Setter Property="BackgroundColor"
+                                                                Value="LightGray" />
+                                                    </DataTrigger>
+                                                </Button.Triggers>
+                                            </Button>
+
+                                        </StackLayout>
+
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </StackLayout>
+                            <!--<CollectionView ItemsSource="{Binding ExerciseSets}"
+                                                VerticalOptions="CenterAndExpand"
+                                                HorizontalOptions="CenterAndExpand">
+                                    <CollectionView.ItemsLayout>
+                                        <GridItemsLayout Orientation="Horizontal"
+                                                         Span="{Binding Sets}" />
+                                        -->
+                            <!--<LinearItemsLayout ItemSpacing="10" Orientation="Horizontal" />-->
+                            <!--
+                                    </CollectionView.ItemsLayout>
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                                <Label Text="SET" />
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>-->
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
