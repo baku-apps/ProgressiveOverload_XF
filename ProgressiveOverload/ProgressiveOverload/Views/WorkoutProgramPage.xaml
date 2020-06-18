@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="ProgressiveOverload.Views.WorkoutProgramPage"
+             xmlns:vm="clr-namespace:ProgressiveOverload.ViewModels"
+             Title="{Binding Title}"
+             x:Name="WorkoutProgram">
+    <ContentPage.BindingContext>
+        <vm:WorkoutProgramViewModel />
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout Padding="8">
+            <Label Text="{Binding Program.Title}" FontSize="Title"/>
+            <!--<RefreshView IsRefreshing="{Binding IsBusy, Mode=TwoWay}"
+                         Command="{Binding LoadItemsCommand}">-->
+                <CollectionView ItemsSource="{Binding WorkoutDay}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout ItemSpacing="8"
+                                           Orientation="Vertical" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Spacing="0" BackgroundColor="Gray" Padding="8">
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Path=BindingContext.OnTappedWorkoutDayCommand, 
+                                                                            Source={x:Reference WorkoutProgram}}"
+                                                          CommandParameter="{Binding .}" />
+                                </StackLayout.GestureRecognizers>
+                                <StackLayout HorizontalOptions="FillAndExpand"
+                                             VerticalOptions="Fill"
+                                             Padding="0"
+                                             Margin="0">
+                                    <Label Text="{Binding Title}"
+                                           FontSize="Large"
+                                           TextColor="White"
+                                           FontAttributes="Bold"/>
+                                </StackLayout >
+
+                                <StackLayout BindableLayout.ItemsSource="{Binding Exercises}"
+                                             Padding="0"
+                                             Margin="0">
+                                    <BindableLayout.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Padding="0"
+                                                  Margin="0"
+                                                  ColumnSpacing="0">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <Label Grid.Column="0"
+                                                       FontSize="Medium"
+                                                       Text="{Binding Name}"
+                                                       TextColor="WhiteSmoke"
+                                                       FontAttributes="Bold"
+                                                       VerticalOptions="StartAndExpand" />
+                                                <Label Grid.Column="1"
+                                                       TextColor="White"
+                                                       Text="{Binding Intensity, StringFormat='({0})'}"
+                                                       VerticalOptions="Center" />
+                                                <Label Grid.Column="2"
+                                                       TextColor="White"
+                                                       Text="{Binding Volume}"
+                                                       VerticalOptions="Center" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>
+                                </StackLayout>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView> 
+            <!--</RefreshView>-->
+        </StackLayout>
+
+    </ContentPage.Content>
+</ContentPage>

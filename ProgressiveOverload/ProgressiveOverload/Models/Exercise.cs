@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ProgressiveOverload.Models
 {
-    class Exercise
+    public class Exercise
     {
-        public Exercise(string name, string intensity, int sets, int reps, int weight, int restMin)
+        public Exercise(string name, IIntensity intensity, int sets, int reps, int weight, int restMin)
         {
+            Id = Guid.NewGuid().ToString();
+
             Name = name;
             Intensity = intensity;
             Sets = sets;
@@ -22,49 +25,17 @@ namespace ProgressiveOverload.Models
             ExerciseSets = setList;
         }
 
-        public string Name { get; set; }
-        public string Intensity { get; set; }
-        public int Sets { get; set; }
-        public int Reps { get; set; }
-        public int RestMin { get; set; }
-        public int Weight { get; set; }
+        public string Id { get; }
+        public string Name { get; }
+        public IIntensity Intensity { get; }
+        public int Sets { get; }
+        public int Reps { get; }
+        public int RestMin { get; }
+        public int Weight { get; }
 
         public string Volume { get => $"{Sets} x {Reps} x {Weight}kg"; }
 
 
-        public List<ExerciseSet> ExerciseSets { get; set; }
-    }
-
-    class ExerciseSet : MvvmHelpers.ObservableObject
-    {
-        public ExerciseSet(Exercise exercise, int index, int reps, int done)
-        {
-            Exercise = exercise;
-            Index = index;
-            Reps = reps;
-            Done = done;
-        }
-
-        public void SetToDone()
-        {
-            Done = 1;
-        }
-
-        public void RemoveDone()
-        {
-            Done = -1;
-        }
-
-        public Exercise Exercise { get; set; }
-
-        public int Index { get; set; }
-
-        public int _done;
-        public int Done
-        {
-            get => _done;
-            set => SetProperty(ref _done, value);
-        }
-        public int Reps { get; set; }
+        public List<ExerciseSet> ExerciseSets { get; }
     }
 }

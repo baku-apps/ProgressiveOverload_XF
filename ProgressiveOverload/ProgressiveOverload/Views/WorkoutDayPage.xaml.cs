@@ -1,45 +1,57 @@
 ﻿using ProgressiveOverload.Models;
 using ProgressiveOverload.ViewModels;
 using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Text;
-using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace ProgressiveOverload.Views
 {
+    [QueryProperty("WorkoutId", "workoutId")]
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class WorkoutDayPage : ContentPage
     {
+        public WorkoutDayViewModel ViewModel { get; set; }
+        public string WorkoutId
+        {
+            set
+            {
+                ViewModel.LoadWorkoutDetailsCommand.Execute(value);
+            }
+        }
         public WorkoutDayPage()
         {
             InitializeComponent();
-            var vm = BindingContext as WorkoutDayViewModel;
+            SizeChanged += MainPageSizeChanged;
+            ViewModel = BindingContext as WorkoutDayViewModel;
 
             TapCountDisposable = TapSubject
                 .Buffer(TapSubject.Throttle(TimeSpan.FromMilliseconds(200)))
                 .Select((xx) => xx.Count)
                 .Subscribe(taps =>
                 {
-                    if (taps > 2)
+                    if (exSet.Done == -1)
                     {
-                        TapCount = 0;
-                        return;
+                        ViewModel.SetDoneCommand.Execute(exSet);
                     }
-                    else if (taps == 1)
+                    else
                     {
-                        vm.SetDoneCommand.Execute(exSet);
-                    }
-                    else if (taps == 2)
-                    {
-                        vm.RemoveDoneCommand.Execute(exSet);
+                        ViewModel.RemoveDoneCommand.Execute(exSet);
+
                     }
                 });
+        }
+
+        private void MainPageSizeChanged(object sender, EventArgs e)
+        {
+            //var button = this.FindByName<Button>("ExerciseSetButton");
+            //var size = (Width / 5);
+            //button.WidthRequest = button.HeightRequest = size;
+            //button.CornerRadius = (int)Math.Round(size / 2);
         }
 
         private int TapCount = 0;

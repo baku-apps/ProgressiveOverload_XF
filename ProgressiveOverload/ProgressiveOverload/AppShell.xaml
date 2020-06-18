@@ -32,14 +32,14 @@
     <!-- Your Pages -->
     <TabBar>
         <Tab Title="Workout" Icon="tab_about.png">
-            <ShellContent ContentTemplate="{DataTemplate local:WorkoutDayPage}" />
+            <ShellContent ContentTemplate="{DataTemplate local:WorkoutProgramPage}" />
         </Tab>
-        <Tab Title="Browse" Icon="tab_feed.png">
+        <!--<Tab Title="Browse" Icon="tab_feed.png">
             <ShellContent ContentTemplate="{DataTemplate local:ItemsPage}" />
         </Tab>
         <Tab Title="About" Icon="tab_about.png">
             <ShellContent ContentTemplate="{DataTemplate local:AboutPage}" />
-        </Tab>
+        </Tab>-->
     </TabBar>
 
     <!-- Optional Templates 

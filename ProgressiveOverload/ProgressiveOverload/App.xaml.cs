@@ -14,6 +14,7 @@ namespace ProgressiveOverload
             InitializeComponent();
 
             DependencyService.Register<MockDataStore>();
+            DependencyService.Register<MockWorkoutDataStore>();
             MainPage = new AppShell();
         }
 

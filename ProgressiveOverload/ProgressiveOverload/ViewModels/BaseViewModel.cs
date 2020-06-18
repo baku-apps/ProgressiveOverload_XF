@@ -13,6 +13,7 @@ namespace ProgressiveOverload.ViewModels
     public class BaseViewModel : MvvmHelpers.BaseViewModel
     {
         public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>();
+        public IDataStore<WorkoutProgram> ProgramDataStore => DependencyService.Get<IDataStore<WorkoutProgram>>();
 
         //bool isBusy = false;
         //public bool IsBusy

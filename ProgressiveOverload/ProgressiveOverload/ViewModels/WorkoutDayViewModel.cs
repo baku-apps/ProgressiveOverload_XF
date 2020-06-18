@@ -1,58 +1,69 @@
-﻿using ProgressiveOverload.Models;
-using System;
-using System.Collections.Generic;
+﻿using MvvmHelpers;
+using ProgressiveOverload.Models;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace ProgressiveOverload.ViewModels
 {
-    class WorkoutDayViewModel : BaseViewModel
+    public class WorkoutDayViewModel : BaseViewModel
     {
-        private List<Exercise> _workout = new List<Exercise>();
-        public List<Exercise> Workout
+        private WorkoutDay _workoutDay;
+        public WorkoutDay WorkoutDay
         {
-            get => _workout;
-            set => SetProperty(ref _workout, value);
+            get => _workoutDay;
+            set => SetProperty(ref _workoutDay, value);
+        }
+
+        private ObservableRangeCollection<Exercise> _exercises = new ObservableRangeCollection<Exercise>();
+        public ObservableRangeCollection<Exercise> Exercises
+        {
+            get => _exercises;
+            set => SetProperty(ref _exercises, value);
         }
 
         public ICommand SetDoneCommand { get; }
         public ICommand RemoveDoneCommand { get; }
+        public ICommand LoadWorkoutDetailsCommand { get; }
 
         public WorkoutDayViewModel()
         {
-            Title = "Day 1 (Lower)";
+            Title = "Day 1 (Lower #1)";
+
+            LoadWorkoutDetailsCommand = new Command<string>(async (id) => await LoadWorkoutDetails(id));
 
             SetDoneCommand = new Command<ExerciseSet>((eSet) =>
             {
                 GetTappedExerciseSet(eSet).SetToDone();
-                OnPropertyChanged("Workout");
+                OnPropertyChanged(nameof(WorkoutDay));
             });
 
             RemoveDoneCommand = new Command<ExerciseSet>((eSet) =>
             {
                 GetTappedExerciseSet(eSet).RemoveDone();
-                OnPropertyChanged("Workout");
+                OnPropertyChanged(nameof(WorkoutDay));
             });
 
-
-            Workout = new List<Exercise>
-            {
-                new Exercise("Squat", "75%", 3, 4, 100, 3),
-                new Exercise("Stiff Leg Deadlift", "RPE7", 3, 10, 60, 2),
-                new Exercise("Leg Press", "RPE8", 2, 20, 75, 2),
-                new Exercise("Calf Raise", "RPE 8", 4, 12, 50, 2),
-            };
+            //WorkoutDay = _workoutDay;
         }
 
         private ExerciseSet GetTappedExerciseSet(ExerciseSet eSet)
         {
-            return Workout
+            return WorkoutDay.Exercises
                 .First(x => x.Name == eSet.Exercise.Name).ExerciseSets
                 .First(es => es.Index == eSet.Index);
+        }
+
+        private async Task LoadWorkoutDetails(string id)
+        {
+            var program = await ProgramDataStore.GetItemsAsync();
+            WorkoutDay = program.First().WorkoutDays.First(w => w.Id == id);
+
+            Exercises.Clear();
+            Exercises.AddRange(WorkoutDay.Exercises);
+            //OnPropertyChanged(nameof(WorkoutDay));
         }
     }
 }
